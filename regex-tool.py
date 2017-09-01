@@ -44,6 +44,7 @@ def main():
     print(has_spec("$abc"))
 
 
+
 if __name__ == "__main__":
     main()
 
