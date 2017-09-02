@@ -72,6 +72,7 @@ def regex_tool(string):
                     else:
                         # print("special escape char")
                         regex.append(r"\%s" % split[i][k])
+            double_space = 0  # TODO when adding a space after a \w+ and continuing in char breakdown the space seems to be removed
         if i+1 == len(split):
             break
         count = -2
