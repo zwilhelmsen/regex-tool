@@ -15,12 +15,13 @@ def regex_tool(string):
     split = string.split(" ")
     regex = []
     double_space = 0
-    esc_char = [r"\\", r"\'", r"\"" ]  # TODO Revisit escape char and regex delimiters
+    esc_char = [r"\\", r"\'", r"\"", r"[", r"]", r"^", r"$", r".", r"|", r"?", r"*", r"+", r"(", r")", r"{", r"}"]
     for i in range(0, len(split), 1):
         # print(i,len(split))
         # print("i is:", i)
         # print(split[i])
         for k in range(0, len(split[i]), 1):
+            # print(split[i][k])
             if split[i].isdigit() and len(split[i]) > 1:
                 regex.append(r"\d+")
                 break
@@ -35,8 +36,6 @@ def regex_tool(string):
                         for element in regex[-2:]:
                             if element == r"\w":
                                 regex[count] = r"\w+"
-                                regex[len(regex) - 1] = ""
-                                regex.remove("")
                             double_space = 1
                             count += 1
                         break
@@ -49,7 +48,7 @@ def regex_tool(string):
                 else:
                     regex.append(r"\w")
                     break
-            # print("k is:", k)
+            # print(split[i][k])
             if split[i][k].isdigit():
                 if prev_regex(regex) == r"\d" or prev_regex(regex) == r"\d+":
                     # print("second digit")
@@ -64,15 +63,20 @@ def regex_tool(string):
                 else:
                     # print("first letter")
                     regex.append(r"\p{L}")
-            else:  # TODO revisit Special Characters and their escape characters in regex
+            else:
+                # print("its a special!")
+                # print(split[i][k])
                 if not prev_regex(regex) == split[i][k]:
-                    if not prev_regex(regex) in esc_char:
-                        # print("special char")
+                    # print("it is not already present!")
+                    # print(split[i][k])
+                    if not split[i][k] in esc_char:
+                        # print(split[i][k])
+                        # print("This is a regular special character. %s is not in list" % split[i][k])
                         regex.append(split[i][k])
                     else:
-                        # print("special escape char")
+                        # print("regex escape character")
                         regex.append(r"\%s" % split[i][k])
-            double_space = 0  # TODO when adding a space after a \w+ and continuing in char breakdown the space seems to be removed
+            double_space = 0
         if i+1 == len(split):
             break
         count = -2
@@ -111,11 +115,20 @@ def prev_regex(list):
         return list[len(list)-1]
 
 
+# def rem_space(list):
+#     return r"\s" in list[-2:]
+
+
 def main():
     # print(has_spec("$abc"))
     # list = ['1', 2]
     # print(len(list))
-    regex_tool(input("> Input the string you want to identify with regular expressions\n"))
+    # print("[" == r"[")
+    while True:
+        regex_tool(input("> Input the string you want to identify with regular expressions\n"))
+        ans = input("Do you want to play again? y/n\n").lower()
+        if ans == "n":
+            break
 
 if __name__ == "__main__":
     main()
